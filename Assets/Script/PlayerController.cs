@@ -13,8 +13,9 @@ public class PlayerController : MonoBehaviour
     //Particulas de poeira pés
     [SerializeField] private ParticleSystem particulaD;
     [SerializeField] private ParticleSystem particulaE;
-    
 
+    //Audio
+    private AudioSource playerAudio;
 
     private Rigidbody playerRb;
 
@@ -43,36 +44,30 @@ public class PlayerController : MonoBehaviour
     { 
         playerRb = GetComponent<Rigidbody>();
         playerAnim = GetComponent<Animator>();
+        playerAudio = GetComponent<AudioSource>();
     }
 
     public void OnJump(InputValue value)
     {
         if (value.isPressed && isOnGround)
         {
-
-            //Parar as particulas de poeira
-            particulaD.Play();
-            particulaE.Play();
-
-            isOnGround = true;
-        }
-
+            playerAudio.PlayOneShot(playerAudio.clip, 1.0f);
 
             playerRb.AddForce(
-                Vector3.up * jumpForce,ForceMode.Impulse);
+                 Vector3.up * jumpForce, ForceMode.Impulse);
 
             isOnGround = false;
 
             //animação
             playerAnim.SetTrigger("Jump_trig");
-    
+        }
     }
     
 
 
    private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.CompareTag("Ground"))
+        if(collision.gameObject.CompareTag("Ground") && !gameOver)
         {
             isOnGround = true;
             //Parar as particulas de poeira

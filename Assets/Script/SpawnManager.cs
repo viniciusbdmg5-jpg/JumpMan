@@ -16,6 +16,16 @@ public class SpawnManager : MonoBehaviour
     {
         InvokeRepeating(nameof(SpawnObstacle), startDelay, repeatRate);
     }
+
+    //Parar o metodo singleton
+     void Update()
+    {
+        if (PlayerController.instance.gameOver)
+        {
+
+            CancelInvoke(nameof(SpawnObstacle));
+        }
+    }
     void SpawnObstacle()
     {
         if (obstaclePrefab.Count != 0 && spawnPoint != null) 
